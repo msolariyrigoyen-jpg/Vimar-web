@@ -95,10 +95,11 @@
           </div>
 
           <div class="field-row">
-            <div class="field field--passengers">
-              <label for="pasajeros">Cantidad de pasajeros <span class="req" aria-hidden="true">*</span></label>
-              <input id="pasajeros" name="pasajeros" type="number" inputmode="numeric" min="1" step="1" required aria-describedby="pasajeros-error">
-              <p class="error" id="pasajeros-error" aria-live="polite"></p>
+            <div class="field">
+              <label for="fecha">Fecha del traslado <span class="req" aria-hidden="true">*</span></label>
+              <input id="fecha" name="fecha" type="date" required aria-describedby="fecha-hint fecha-error">
+              <p class="hint" id="fecha-hint">Qué día te pasamos a buscar.</p>
+              <p class="error" id="fecha-error" aria-live="polite"></p>
             </div>
             <div class="field">
               <label for="hora">Hora estimada <span class="req" aria-hidden="true">*</span></label>
@@ -108,17 +109,24 @@
             </div>
           </div>
 
-          <div class="field">
-            <label for="contacto">Email o teléfono <span class="req" aria-hidden="true">*</span></label>
-            <input id="contacto" name="contacto" type="text" autocomplete="email" required aria-describedby="contacto-hint contacto-error">
-            <p class="hint" id="contacto-hint">Te respondemos por el medio que nos dejes.</p>
-            <p class="error" id="contacto-error" aria-live="polite"></p>
+          <div class="field-row">
+            <div class="field field--passengers">
+              <label for="pasajeros">Cantidad de pasajeros <span class="req" aria-hidden="true">*</span></label>
+              <input id="pasajeros" name="pasajeros" type="number" inputmode="numeric" min="1" step="1" required aria-describedby="pasajeros-error">
+              <p class="error" id="pasajeros-error" aria-live="polite"></p>
+            </div>
+            <div class="field">
+              <label for="contacto">Email o teléfono <span class="req" aria-hidden="true">*</span></label>
+              <input id="contacto" name="contacto" type="text" autocomplete="email" required aria-describedby="contacto-hint contacto-error">
+              <p class="hint" id="contacto-hint">Te respondemos por el medio que nos dejes.</p>
+              <p class="error" id="contacto-error" aria-live="polite"></p>
+            </div>
           </div>
 
           <div class="field">
             <label for="mensaje">Mensaje</label>
             <textarea id="mensaje" name="mensaje" rows="5" aria-describedby="mensaje-hint mensaje-error"></textarea>
-            <p class="hint" id="mensaje-hint">Fecha del viaje, cantidad de valijas y cualquier detalle que nos ayude.</p>
+            <p class="hint" id="mensaje-hint">Cantidad de valijas y cualquier detalle que nos ayude.</p>
             <p class="error" id="mensaje-error" aria-live="polite"></p>
           </div>
 

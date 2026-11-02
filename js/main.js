@@ -188,8 +188,9 @@ if (form) {
     vuelo: form.elements.vuelo,
     origen: form.elements.origen,
     destino: form.elements.destino,
-    pasajeros: form.elements.pasajeros,
+    fecha: form.elements.fecha,
     hora: form.elements.hora,
+    pasajeros: form.elements.pasajeros,
     contacto: form.elements.contacto,
     mensaje: form.elements.mensaje,
   };
@@ -226,7 +227,15 @@ if (form) {
   fields.servicio.addEventListener("change", syncByService);
   syncByService();
 
-  const isEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
+  // Fecha de hoy en formato aaaa-mm-dd (hora local): no se puede elegir un día anterior
+  const pad = (n) => String(n).padStart(2, "0");
+  const now = new Date();
+  const today = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+  fields.fecha.min = today;
+  // aaaa-mm-dd → dd/mm/aaaa para el mensaje de WhatsApp
+  const formatDate = (iso) => iso.split("-").reverse().join("/");
+
+  const isEmail =(v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
   const isPhone = (v) => /^[+\d][\d\s()-]*$/.test(v) && v.replace(/\D/g, "").length >= 8;
 
   const validators = {
@@ -235,6 +244,11 @@ if (form) {
     vuelo: () => "", // opcional
     origen: (v) => (v ? "" : "Escribí desde dónde salimos: una dirección, un hotel o el aeropuerto."),
     destino: (v) => (v ? "" : "Escribí a dónde tenemos que llegar."),
+    fecha: (v) => {
+      if (!v) return "Indicá qué día es el traslado.";
+      if (v < today) return "Elegí una fecha de hoy en adelante.";
+      return "";
+    },
     pasajeros: (v) => {
       if (!fields.pasajeros.required) return "";
       if (!v) return "Indicá cuántas personas viajan.";
@@ -285,8 +299,8 @@ if (form) {
     ];
     if (!flightWrap.hidden && v("vuelo")) lines.push(`Número de vuelo: ${v("vuelo").toUpperCase()}`);
     lines.push(`Origen: ${v("origen")}`, `Destino: ${v("destino")}`);
+    lines.push(`Fecha: ${formatDate(v("fecha"))}`, `Hora estimada: ${v("hora")}`);
     if (fields.pasajeros.required) lines.push(`Pasajeros: ${v("pasajeros")}`);
-    lines.push(`Hora estimada: ${v("hora")}`);
     lines.push(`Contacto: ${v("contacto")}`);
     if (v("mensaje")) lines.push("", v("mensaje"));
 

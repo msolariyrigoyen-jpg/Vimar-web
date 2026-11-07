@@ -11,6 +11,12 @@ const SERVICES = {
 };
 const AIRPORT_SERVICES = ["aeropuerto-madryn", "aeropuerto-trelew"];
 
+// Links de pago de Mercado Pago (tarjeta de crédito o débito) por servicio
+const PAY_LINKS = {
+  "aeropuerto-madryn": "https://mpago.la/14FxNVs",
+  "aeropuerto-trelew": "https://mpago.la/1Xnpk5W",
+};
+
 /* Menú mobile ------------------------------------------------------------ */
 const navToggle = document.querySelector(".nav-toggle");
 const nav = document.getElementById("site-nav");
@@ -310,5 +316,19 @@ if (form) {
     if (win) win.opener = null;
     else location.href = url;
     status.textContent = "Abrimos WhatsApp con tu mensaje listo. Solo falta que lo envíes desde ahí.";
+
+    // Después de completar los datos, se ofrece el pago con tarjeta del servicio elegido
+    const payBox = document.getElementById("form-pay");
+    const payLink = document.getElementById("pay-link");
+    const link = PAY_LINKS[v("servicio")];
+    if (payBox && payLink) {
+      if (link) {
+        payLink.href = link;
+        payBox.style.display = "";
+        payBox.scrollIntoView({ behavior: "smooth", block: "center" });
+      } else {
+        payBox.style.display = "none";
+      }
+    }
   });
 }

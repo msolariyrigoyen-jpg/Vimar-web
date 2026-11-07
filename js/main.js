@@ -11,6 +11,12 @@ const SERVICES = {
 };
 const AIRPORT_SERVICES = ["aeropuerto-madryn", "aeropuerto-trelew"];
 
+// Dirección del servidor de pagos (carpeta worker/). Vacía = sin pago online: todo sigue por WhatsApp
+const BOOKING_API = "";
+// Precios que ve el cliente. El monto que se cobra lo define el servidor: si cambian, cambiar también worker/index.js
+const PRICES = { "aeropuerto-madryn": 45000, "aeropuerto-trelew": 150000 };
+const formatPrice = (amount) => `$${amount.toLocaleString("es-AR")}`;
+
 /* Menú mobile ------------------------------------------------------------ */
 const navToggle = document.querySelector(".nav-toggle");
 const nav = document.getElementById("site-nav");
@@ -197,6 +203,11 @@ if (form) {
   const flightWrap = form.querySelector(".field--flight");
   const passengersWrap = form.querySelector(".field--passengers");
   const status = form.querySelector(".form__status");
+  const submitButton = form.querySelector("[type=submit]");
+  const submitLabel = form.querySelector("[data-submit-label]");
+  const payIcon = form.querySelector("[data-icon-pay]");
+  const whatsappIcon = form.querySelector("[data-icon-whatsapp]");
+  const payNote = form.querySelector("[data-pay-note]");
 
   // Preselección desde ?servicio=
   const pre = new URLSearchParams(location.search).get("servicio");
@@ -223,6 +234,17 @@ if (form) {
     passengersWrap.hidden = !needsPassengers;
     fields.pasajeros.required = needsPassengers;
     if (!needsPassengers) clearError(fields.pasajeros);
+
+    // Con precio fijo se paga online; el resto sigue por WhatsApp
+    const price = BOOKING_API ? PRICES[service] : undefined;
+    submitLabel.textContent = price ? `Pagar ${formatPrice(price)}` : "Enviar por WhatsApp";
+    // En un SVG la propiedad .hidden no existe: hay que cambiar el atributo
+    payIcon.toggleAttribute("hidden", !price);
+    whatsappIcon.toggleAttribute("hidden", Boolean(price));
+    payNote.hidden = !price;
+    payNote.textContent = price
+      ? `Total a pagar: ${formatPrice(price)}. Pagás con Mercado Pago, recibís tu ticket y después VIMAR Traslados se contacta con vos.`
+      : "";
   };
   fields.servicio.addEventListener("change", syncByService);
   syncByService();
@@ -252,7 +274,8 @@ if (form) {
     pasajeros: (v) => {
       if (!fields.pasajeros.required) return "";
       if (!v) return "Indicá cuántas personas viajan.";
-      if (!/^\d+$/.test(v) || Number(v) < 1) return "Escribí un número entero, de 1 en adelante.";
+      if (!/^\d+$/.test(v) || Number(v) < 1) return "Escribí un número entero, de 1 a 3.";
+      if (Number(v) > 3) return "El máximo es 3 pasajeros por viaje.";
       return "";
     },
     hora: (v) => (v ? "" : "Indicá a qué hora te pasamos a buscar (por ejemplo, 06:30)."),
@@ -281,12 +304,44 @@ if (form) {
     });
   });
 
+  // Guarda la reserva en el servidor y lleva al cliente a pagar en Mercado Pago
+  async function startPayment() {
+    const data = Object.fromEntries(Object.keys(fields).map((name) => [name, fields[name].value.trim()]));
+    if (flightWrap.hidden) data.vuelo = "";
+    submitButton.disabled = true;
+    status.textContent = "Te estamos llevando a Mercado Pago…";
+    try {
+      const response = await fetch(`${BOOKING_API}/api/reservas`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (!response.ok) throw new Error(`Respuesta ${response.status}`);
+      const { checkoutUrl } = await response.json();
+      location.assign(checkoutUrl);
+    } catch (error) {
+      console.error(error);
+      submitButton.disabled = false;
+      status.textContent =
+        "No pudimos abrir el pago y no se te cobró nada. Probá de nuevo o escribinos por WhatsApp al +54 9 280 505-3537.";
+    }
+  }
+  // Al volver con el botón "atrás" del navegador, el botón tiene que poder usarse otra vez
+  window.addEventListener("pageshow", () => {
+    submitButton.disabled = false;
+  });
+
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     status.textContent = "";
     const invalid = Object.keys(fields).filter((name) => !validate(name));
     if (invalid.length) {
       fields[invalid[0]].focus();
+      return;
+    }
+
+    if (BOOKING_API && PRICES[fields.servicio.value]) {
+      startPayment();
       return;
     }
 
@@ -311,4 +366,89 @@ if (form) {
     else location.href = url;
     status.textContent = "Abrimos WhatsApp con tu mensaje listo. Solo falta que lo envíes desde ahí.";
   });
+}
+
+/* Ticket: muestra la reserva solo si el servidor confirma el pago --------- */
+const ticketPage = document.querySelector("[data-ticket]");
+
+if (ticketPage) {
+  const params = new URLSearchParams(location.search);
+  const bookingId = params.get("id");
+  const paymentId = params.get("payment_id");
+  const loading = ticketPage.querySelector("[data-ticket-loading]");
+  const problem = ticketPage.querySelector("[data-ticket-problem]");
+  const card = ticketPage.querySelector("[data-ticket-card]");
+  const actions = ticketPage.querySelector("[data-ticket-actions]");
+
+  const showProblem = (title, text) => {
+    loading.hidden = true;
+    problem.hidden = false;
+    problem.querySelector("[data-problem-title]").textContent = title;
+    problem.querySelector("[data-problem-text]").textContent = text;
+  };
+
+  const showTicket = (ticket) => {
+    const b = ticket.booking;
+    const values = {
+      code: ticket.code,
+      serviceName: ticket.serviceName,
+      amount: formatPrice(ticket.amount),
+      paidAt: new Date(ticket.paidAt).toLocaleString("es-AR", { dateStyle: "short", timeStyle: "short" }),
+      nombre: b.nombre,
+      contacto: b.contacto,
+      vuelo: b.vuelo,
+      origen: b.origen,
+      destino: b.destino,
+      fecha: b.fecha.split("-").reverse().join("/"),
+      hora: b.hora,
+      pasajeros: b.pasajeros,
+      mensaje: b.mensaje,
+    };
+    Object.entries(values).forEach(([name, value]) => {
+      card.querySelector(`[data-field="${name}"]`).textContent = value;
+    });
+    ["vuelo", "mensaje"].forEach((name) => {
+      card.querySelector(`[data-row="${name}"]`).hidden = !values[name];
+    });
+    loading.hidden = true;
+    card.hidden = false;
+    actions.hidden = false;
+  };
+
+  ticketPage.querySelector("[data-ticket-print]").addEventListener("click", () => window.print());
+
+  // El aviso de Mercado Pago puede tardar: se reintenta durante unos 30 segundos
+  const ATTEMPTS = 10;
+  const check = async (attempt) => {
+    let ticket = null;
+    try {
+      const query = paymentId ? `?payment_id=${encodeURIComponent(paymentId)}` : "";
+      const response = await fetch(`${BOOKING_API}/api/reservas/${encodeURIComponent(bookingId)}${query}`);
+      if (response.status === 404) {
+        showProblem("No encontramos esta reserva", "Revisá el link. Si ya pagaste, escribinos por WhatsApp y lo resolvemos.");
+        return;
+      }
+      if (response.ok) ticket = await response.json();
+    } catch (error) {
+      console.error(error);
+    }
+
+    if (ticket?.status === "paid") {
+      showTicket(ticket);
+    } else if (ticket?.status === "refunded") {
+      showProblem("Este pago fue devuelto", "El ticket ya no es válido. Si necesitás un traslado, escribinos por WhatsApp.");
+    } else if (ticket?.lastAttempt === "rejected" || params.get("status") === "rejected") {
+      showProblem("El pago no se acreditó", "No se generó el ticket. Volvé a Contacto para intentarlo con otro medio de pago.");
+    } else if (attempt < ATTEMPTS) {
+      setTimeout(() => check(attempt + 1), 3000);
+    } else {
+      showProblem(
+        "Todavía no pudimos confirmar tu pago",
+        "Si ya pagaste, recargá esta página en unos minutos o escribinos por WhatsApp. No vuelvas a pagar."
+      );
+    }
+  };
+
+  if (bookingId && BOOKING_API) check(1);
+  else showProblem("No encontramos esta reserva", "Revisá el link o escribinos por WhatsApp.");
 }

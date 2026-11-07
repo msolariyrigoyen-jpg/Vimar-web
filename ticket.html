@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="es-AR" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tu ticket | VIMAR Traslados</title>
+  <meta name="description" content="Ticket de tu reserva con VIMAR Traslados.">
+  <meta name="robots" content="noindex">
+  <meta name="referrer" content="no-referrer">
+  <meta name="theme-color" content="#12223a">
+  <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:ital,wght@0,400;0,500;0,600;1,500&family=Cinzel:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script>document.documentElement.classList.remove("no-js")</script>
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Saltar al contenido</a>
+
+  <!-- ===== Menú compartido (idéntico en todas las páginas) ===== -->
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="index.html" aria-label="VIMAR Traslados, inicio">
+        <img src="img/logo-mark.svg" alt="" width="34" height="35">
+        <span class="logo-text"><span class="logo-word">VIMAR</span><span class="logo-sub">Traslados</span></span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Abrir menú">
+        <svg class="icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+      <nav id="site-nav" class="site-nav" aria-label="Principal">
+        <ul role="list">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="servicios.html">Servicios</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+          <li><a class="btn btn--reserve" href="contacto.html">Reservar</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="section">
+      <div class="wrap ticket-page" data-ticket>
+        <!-- js/main.js muestra uno solo de estos bloques, según lo que responda el servidor -->
+        <div class="ticket-state" data-ticket-loading role="status">
+          <h1 class="h2">Estamos verificando tu pago</h1>
+          <p class="lead">Esto puede tardar unos segundos. No cierres esta página.</p>
+        </div>
+
+        <div class="ticket-state" data-ticket-problem role="alert" hidden>
+          <h1 class="h2" data-problem-title></h1>
+          <p class="lead" data-problem-text></p>
+          <div class="ticket-actions">
+            <a class="btn btn--ghost" href="https://wa.me/5492805053537">Escribinos por WhatsApp</a>
+          </div>
+        </div>
+
+        <article class="ticket" data-ticket-card hidden>
+          <header class="ticket__head">
+            <div>
+              <p class="ticket__label">Ticket</p>
+              <h1 class="ticket__code" data-field="code"></h1>
+            </div>
+            <p class="ticket__status">Pago confirmado</p>
+          </header>
+
+          <dl class="ticket__data">
+            <div><dt>Pasajero</dt><dd data-field="nombre"></dd></div>
+            <div><dt>Contacto</dt><dd data-field="contacto"></dd></div>
+            <div><dt>Servicio</dt><dd data-field="serviceName"></dd></div>
+            <div data-row="vuelo"><dt>Número de vuelo</dt><dd data-field="vuelo"></dd></div>
+            <div><dt>Origen</dt><dd data-field="origen"></dd></div>
+            <div><dt>Destino</dt><dd data-field="destino"></dd></div>
+            <div><dt>Fecha</dt><dd data-field="fecha"></dd></div>
+            <div><dt>Hora estimada</dt><dd data-field="hora"></dd></div>
+            <div><dt>Pasajeros</dt><dd data-field="pasajeros"></dd></div>
+            <div class="ticket__wide" data-row="mensaje"><dt>Mensaje</dt><dd data-field="mensaje"></dd></div>
+            <div><dt>Total pagado</dt><dd data-field="amount"></dd></div>
+            <div><dt>Fecha del pago</dt><dd data-field="paidAt"></dd></div>
+          </dl>
+
+          <p class="ticket__next">Ahora VIMAR Traslados se va a contactar con vos para coordinar el viaje.</p>
+        </article>
+
+        <div class="ticket-actions" data-ticket-actions hidden>
+          <button class="btn" type="button" data-ticket-print>Guardar o imprimir</button>
+          <a class="btn btn--ghost" href="index.html">Volver al inicio</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== Footer compartido (idéntico en todas las páginas) ===== -->
+  <footer class="site-footer">
+    <div class="wrap">
+      <p class="footer__logo">
+        <img src="img/logo-mark.svg" alt="" width="120" height="124">
+        <span class="logo-text"><span class="logo-word">VIMAR</span><span class="logo-sub">Traslados</span></span>
+      </p>
+      <div class="footer__grid">
+        <p class="soft">Traslados privados y mensajería en Puerto Madryn, Trelew y alrededores.</p>
+        <nav aria-label="Pie de página">
+          <h2>Páginas</h2>
+          <ul role="list">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="servicios.html">Servicios</a></li>
+            <li><a href="contacto.html">Contacto</a></li>
+          </ul>
+        </nav>
+        <div>
+          <h2>Contacto</h2>
+          <!-- Teléfono y email reales. Instagram (@vimartraslados) todavía es de ejemplo: confirmar -->
+          <ul role="list">
+            <li><a href="https://wa.me/5492805053537">WhatsApp +54 9 280 505-3537</a></li>
+            <li><a href="mailto:vimartraslados@gmail.com">vimartraslados@gmail.com</a></li>
+            <li><a href="https://www.instagram.com/vimartraslados/">Instagram @vimartraslados</a></li>
+          </ul>
+        </div>
+      </div>
+      <p class="footer__legal">© 2026 VIMAR Traslados. Puerto Madryn, Chubut.</p>
+    </div>
+  </footer>
+</body>
+</html>

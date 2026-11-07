@@ -918,3 +918,70 @@ button, input, select, textarea { font: inherit; color: inherit; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition-duration: 0.01ms !important; animation: none !important; }
 }
+
+/* ===== Pago y ticket ===== */
+.form__pay-note {
+  padding: 1rem 1.25rem;
+  background: var(--surface);
+  border-left: 3px solid var(--bone);
+  font-weight: 500;
+}
+.form__pay-note[hidden] { display: none; }
+.btn:disabled { opacity: 0.6; cursor: wait; }
+.btn svg[hidden] { display: none; }
+
+.ticket-page { max-width: 760px; display: grid; gap: 2rem; }
+.ticket-page [hidden] { display: none; }
+.ticket-state { display: grid; gap: 1rem; }
+.ticket-actions { display: flex; flex-wrap: wrap; gap: 1rem; }
+
+.ticket { background: var(--surface); border-top: 6px solid var(--bone); }
+.ticket__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: clamp(1.5rem, 4vw, 2.25rem);
+  border-bottom: 1px dashed var(--ink-soft);
+}
+.ticket__label { color: var(--ink-soft); font-size: var(--step-small); }
+.ticket__code {
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: clamp(2rem, 6vw, 3rem);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+}
+.ticket__status {
+  padding: 0.5rem 1rem;
+  background: var(--bone);
+  color: var(--on-bone);
+  font-weight: 700;
+}
+.ticket__data {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem 2rem;
+  padding: clamp(1.5rem, 4vw, 2.25rem);
+}
+.ticket__data dt { color: var(--ink-soft); font-size: var(--step-small); }
+.ticket__data dd { margin: 0.15rem 0 0; font-weight: 600; overflow-wrap: anywhere; white-space: pre-line; }
+.ticket__wide { grid-column: 1 / -1; }
+.ticket__next {
+  padding: 1.25rem clamp(1.5rem, 4vw, 2.25rem);
+  border-top: 1px dashed var(--ink-soft);
+  font-weight: 500;
+}
+@media (max-width: 480px) {
+  .ticket__data { grid-template-columns: 1fr; }
+}
+@media print {
+  .site-header, .site-footer, .skip-link, .ticket-actions { display: none !important; }
+  body { background: #fff; color: #000; }
+  .section { padding: 0; }
+  .ticket { background: #fff; color: #000; border: 1px solid #000; }
+  .ticket__status { background: #fff; color: #000; border: 1px solid #000; }
+  .ticket__label, .ticket__data dt { color: #444; }
+  .ticket__head, .ticket__next { border-color: #000; }
+}

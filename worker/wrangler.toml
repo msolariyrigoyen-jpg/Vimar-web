@@ -1,0 +1,12 @@
+name = "vimar-reservas"
+main = "index.js"
+compatibility_date = "2026-10-01"
+
+[vars]
+SITE_URL = "https://vimartraslados.com"
+NOTIFY_EMAIL = "vimartraslados@gmail.com"
+
+# Completar "id" con el identificador de la base KV creada en Cloudflare (ver LEEME.md)
+[[kv_namespaces]]
+binding = "RESERVAS"
+id = "COMPLETAR"

@@ -199,6 +199,7 @@ if (form) {
     pasajeros: form.elements.pasajeros,
     contacto: form.elements.contacto,
     mensaje: form.elements.mensaje,
+    condiciones: form.elements.condiciones,
   };
   const flightWrap = form.querySelector(".field--flight");
   const passengersWrap = form.querySelector(".field--passengers");
@@ -208,6 +209,7 @@ if (form) {
   const payIcon = form.querySelector("[data-icon-pay]");
   const whatsappIcon = form.querySelector("[data-icon-whatsapp]");
   const payNote = form.querySelector("[data-pay-note]");
+  const termsWrap = form.querySelector(".field--terms");
 
   // Preselección desde ?servicio=
   const pre = new URLSearchParams(location.search).get("servicio");
@@ -242,6 +244,8 @@ if (form) {
     payIcon.toggleAttribute("hidden", !price);
     whatsappIcon.toggleAttribute("hidden", Boolean(price));
     payNote.hidden = !price;
+    termsWrap.hidden = !price;
+    if (!price) clearError(fields.condiciones);
     payNote.textContent = price
       ? `Total a pagar: ${formatPrice(price)}. Pagás con Mercado Pago, recibís tu ticket y después VIMAR Traslados se contacta con vos.`
       : "";
@@ -286,6 +290,7 @@ if (form) {
       return "";
     },
     mensaje: () => "",
+    condiciones: () => (termsWrap.hidden || fields.condiciones.checked ? "" : "Para pagar, tenés que aceptar las condiciones."),
   };
 
   const validate = (name) => {
@@ -308,6 +313,7 @@ if (form) {
   async function startPayment() {
     const data = Object.fromEntries(Object.keys(fields).map((name) => [name, fields[name].value.trim()]));
     if (flightWrap.hidden) data.vuelo = "";
+    data.condiciones = fields.condiciones.checked;
     submitButton.disabled = true;
     status.textContent = "Te estamos llevando a Mercado Pago…";
     try {
@@ -451,4 +457,49 @@ if (ticketPage) {
 
   if (bookingId && BOOKING_API) check(1);
   else showProblem("No encontramos esta reserva", "Revisá el link o escribinos por WhatsApp.");
+}
+
+/* Reservas y pagos: botón de arrepentimiento → WhatsApp ------------------- */
+const withdrawForm = document.getElementById("withdraw-form");
+
+if (withdrawForm) {
+  const required = {
+    nombre: "Escribí tu nombre y apellido.",
+    contacto: "Dejanos un email o un teléfono para responderte.",
+    fecha: "Indicá la fecha del traslado.",
+  };
+  const withdrawStatus = withdrawForm.querySelector(".form__status");
+
+  const check = (name) => {
+    const input = withdrawForm.elements[name];
+    const message = input.value.trim() ? "" : required[name];
+    document.getElementById(`${input.id}-error`).textContent = message;
+    if (message) input.setAttribute("aria-invalid", "true");
+    else input.removeAttribute("aria-invalid");
+    return !message;
+  };
+
+  withdrawForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const invalid = Object.keys(required).filter((name) => !check(name));
+    if (invalid.length) {
+      withdrawForm.elements[invalid[0]].focus();
+      return;
+    }
+    const value = (name) => withdrawForm.elements[name].value.trim();
+    const lines = [
+      "Hola VIMAR Traslados, quiero ejercer mi derecho de arrepentimiento.",
+      "",
+      `Nombre y apellido: ${value("nombre")}`,
+      `Contacto: ${value("contacto")}`,
+      `Fecha del traslado: ${value("fecha").split("-").reverse().join("/")}`,
+    ];
+    if (value("codigo")) lines.push(`Código del ticket: ${value("codigo").toUpperCase()}`);
+
+    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join("\n"))}`;
+    const win = window.open(url, "_blank");
+    if (win) win.opener = null;
+    else location.href = url;
+    withdrawStatus.textContent = "Abrimos WhatsApp con tu pedido listo. Solo falta que lo envíes desde ahí.";
+  });
 }

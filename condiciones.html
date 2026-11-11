@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="es-AR" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reservas y pagos | VIMAR Traslados</title>
+  <meta name="description" content="Condiciones de reserva, pago, cancelación y devolución de VIMAR Traslados.">
+  <meta name="theme-color" content="#12223a">
+  <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:ital,wght@0,400;0,500;0,600;1,500&family=Cinzel:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script>document.documentElement.classList.remove("no-js")</script>
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Saltar al contenido</a>
+
+  <!-- ===== Menú compartido (idéntico en todas las páginas) ===== -->
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="index.html" aria-label="VIMAR Traslados, inicio">
+        <img src="img/logo-mark.svg" alt="" width="34" height="35">
+        <span class="logo-text"><span class="logo-word">VIMAR</span><span class="logo-sub">Traslados</span></span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Abrir menú">
+        <svg class="icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+      <nav id="site-nav" class="site-nav" aria-label="Principal">
+        <ul role="list">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="servicios.html">Servicios</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+          <li><a class="btn btn--reserve" href="contacto.html">Reservar</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="page-head page-head--plain">
+      <div class="wrap">
+        <h1 class="display">Reservas y pagos</h1>
+        <p class="lead">Las condiciones claras, antes de viajar.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap policy prose">
+        <h2 class="h3">Reservas</h2>
+        <p>Podés reservar desde el formulario de <a href="contacto.html">Contacto</a>, por WhatsApp al <a href="https://wa.me/5492805053537">+54 9 280 505-3537</a> o por email a <a href="mailto:vimartraslados@gmail.com">vimartraslados@gmail.com</a>. Los traslados a los aeropuertos que pagás online quedan confirmados al acreditarse el pago. Los demás servicios quedan confirmados cuando te respondemos con el horario y el precio.</p>
+
+        <h2 class="h3">Pagos</h2>
+        <p>Los traslados a los aeropuertos de Puerto Madryn y Trelew se pueden pagar a través de Mercado Pago, con los medios que ofrece, desde la página de Contacto, una vez que completás tus datos. Los servicios a cotizar se pagan con el medio que acordemos al confirmar el traslado.</p>
+
+        <h2 class="h3">Cancelaciones</h2>
+        <ul>
+          <li>Con más de 24 horas de anticipación al horario del traslado: te devolvemos el 100 % de lo pagado.</li>
+          <li>Dentro de las 24 horas previas al traslado: se cobra el 100 % del servicio y no hay devolución.</li>
+          <li>Si no te presentás en el horario y lugar acordados: se cobra el 100 % del servicio.</li>
+        </ul>
+        <p>Para cancelar, escribinos por WhatsApp o email indicando tu nombre y la fecha del traslado.</p>
+
+        <h2 class="h3">Vuelos demorados</h2>
+        <p>Con tu número de vuelo seguimos el arribo de tu vuelo y coordinamos la espera según la demora.</p>
+
+        <h2 class="h3">Devoluciones</h2>
+        <p>Si no podemos realizar el traslado, te devolvemos el 100 % de lo pagado.</p>
+        <p>Las devoluciones se hacen por el mismo medio de pago que usaste.</p>
+
+        <h2 class="h3" id="arrepentimiento">Derecho de arrepentimiento</h2>
+        <p>Si contrataste el servicio a distancia, podés arrepentirte avisándonos con al menos 24 horas de anticipación al traslado, desde el Botón de arrepentimiento. No necesitás registrarte.</p>
+
+        <form id="withdraw-form" class="form" novalidate aria-labelledby="arrepentimiento">
+          <div class="field">
+            <label for="w-nombre">Nombre y apellido <span class="req" aria-hidden="true">*</span></label>
+            <input id="w-nombre" name="nombre" type="text" autocomplete="name" required aria-describedby="w-nombre-error">
+            <p class="error" id="w-nombre-error" aria-live="polite"></p>
+          </div>
+          <div class="field">
+            <label for="w-contacto">Email o teléfono <span class="req" aria-hidden="true">*</span></label>
+            <input id="w-contacto" name="contacto" type="text" required aria-describedby="w-contacto-error">
+            <p class="error" id="w-contacto-error" aria-live="polite"></p>
+          </div>
+          <div class="field">
+            <label for="w-fecha">Fecha del traslado <span class="req" aria-hidden="true">*</span></label>
+            <input id="w-fecha" name="fecha" type="date" required aria-describedby="w-fecha-error">
+            <p class="error" id="w-fecha-error" aria-live="polite"></p>
+          </div>
+          <div class="field">
+            <label for="w-codigo">Código del ticket <span class="soft">(opcional)</span></label>
+            <input id="w-codigo" name="codigo" type="text" autocomplete="off" spellcheck="false" aria-describedby="w-codigo-hint">
+            <p class="hint" id="w-codigo-hint">Si pagaste online, figura en tu ticket (por ejemplo, VIM-7KQ2XP).</p>
+          </div>
+          <div class="form__actions">
+            <button class="btn" type="submit">Botón de arrepentimiento</button>
+            <p class="form__status" role="status"></p>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== Footer compartido (idéntico en todas las páginas) ===== -->
+  <footer class="site-footer">
+    <div class="wrap">
+      <p class="footer__logo">
+        <img src="img/logo-mark.svg" alt="" width="120" height="124">
+        <span class="logo-text"><span class="logo-word">VIMAR</span><span class="logo-sub">Traslados</span></span>
+      </p>
+      <div class="footer__grid">
+        <p class="soft">Traslados privados y mensajería en Puerto Madryn, Trelew y alrededores.</p>
+        <nav aria-label="Pie de página">
+          <h2>Páginas</h2>
+          <ul role="list">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="servicios.html">Servicios</a></li>
+            <li><a href="contacto.html">Contacto</a></li>
+            <li><a href="condiciones.html" aria-current="page">Reservas y pagos</a></li>
+            <li><a href="condiciones.html#arrepentimiento">Botón de arrepentimiento</a></li>
+            <li><a href="legal.html">Aviso legal</a></li>
+          </ul>
+        </nav>
+        <div>
+          <h2>Contacto</h2>
+          <!-- Teléfono y email reales. Instagram (@vimartraslados) todavía es de ejemplo: confirmar -->
+          <ul role="list">
+            <li><a href="https://wa.me/5492805053537">WhatsApp +54 9 280 505-3537</a></li>
+            <li><a href="mailto:vimartraslados@gmail.com">vimartraslados@gmail.com</a></li>
+            <li><a href="https://www.instagram.com/vimartraslados/">Instagram @vimartraslados</a></li>
+          </ul>
+        </div>
+      </div>
+      <p class="footer__legal">© 2026 VIMAR Traslados. Puerto Madryn, Chubut.</p>
+    </div>
+  </footer>
+</body>
+</html>

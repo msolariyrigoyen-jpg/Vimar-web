@@ -133,6 +133,14 @@
 
           <p class="form__pay-note" data-pay-note hidden></p>
 
+          <div class="field field--terms" hidden>
+            <label class="check" for="condiciones">
+              <input id="condiciones" name="condiciones" type="checkbox" aria-describedby="condiciones-error">
+              <span>Leí y acepto las <a href="condiciones.html" target="_blank" rel="noopener">condiciones de reserva, pago y cancelación</a>. <span class="req" aria-hidden="true">*</span></span>
+            </label>
+            <p class="error" id="condiciones-error" aria-live="polite"></p>
+          </div>
+
           <div class="form__actions">
             <button class="btn btn--reserve" type="submit">
               <svg data-icon-pay hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4"/></svg>
@@ -141,6 +149,7 @@
             </button>
             <p class="form__status" role="status"></p>
           </div>
+          <p class="hint form__privacy">Usamos tus datos solo para gestionar el servicio y comunicarnos con vos. Más información en el <a href="legal.html#privacidad">Aviso legal</a>.</p>
         </form>
 
         <!-- Teléfono y email reales. Instagram (@vimartraslados) todavía es de ejemplo: confirmar -->
@@ -188,6 +197,9 @@
             <li><a href="index.html">Inicio</a></li>
             <li><a href="servicios.html">Servicios</a></li>
             <li><a href="contacto.html" aria-current="page">Contacto</a></li>
+            <li><a href="condiciones.html">Reservas y pagos</a></li>
+            <li><a href="condiciones.html#arrepentimiento">Botón de arrepentimiento</a></li>
+            <li><a href="legal.html">Aviso legal</a></li>
           </ul>
         </nav>
         <div>

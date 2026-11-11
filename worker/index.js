@@ -55,6 +55,7 @@ function parseBooking(raw) {
 
   const validDate = /^\d{4}-\d{2}-\d{2}$/.test(booking.fecha) && !Number.isNaN(Date.parse(booking.fecha));
   const valid =
+    raw?.condiciones === true && // sin aceptar las condiciones no se cobra
     booking.nombre &&
     service &&
     booking.origen &&
@@ -94,6 +95,7 @@ async function createBooking(request, env, cors) {
     amount: service.price,
     serviceName: service.name,
     createdAt: new Date().toISOString(),
+    termsAcceptedAt: new Date().toISOString(),
     booking,
   };
   // Se guarda antes de cobrar: un pago nunca puede llegar sin sus datos

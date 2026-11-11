@@ -985,3 +985,24 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .ticket__label, .ticket__data dt { color: #444; }
   .ticket__head, .ticket__next { border-color: #000; }
 }
+
+/* ===== Reservas y pagos ===== */
+.policy h2 { margin-top: 2.5rem; }
+.policy h2:first-child { margin-top: 0; }
+.policy ul { list-style: disc; padding-left: 1.25rem; display: grid; gap: 0.5rem; }
+.policy a:not(.btn) { text-decoration: underline; }
+.policy .form { margin-top: 1.5rem; }
+.field--terms[hidden] { display: none; }
+.field .check { display: flex; align-items: flex-start; gap: 0.75rem; font-weight: 500; }
+.field .check a { text-decoration: underline; }
+.field .check input {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  min-height: 0;
+  padding: 0;
+  accent-color: var(--bone);
+}
+.field .check input:focus-visible { outline: 2px solid var(--bone); outline-offset: 2px; }
+.policy h3 { margin-top: 1.5rem; font-weight: 600; font-size: 1.125rem; }
+.form__privacy a { text-decoration: underline; }
